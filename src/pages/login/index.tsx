@@ -1,8 +1,9 @@
 import { useState } from 'react';
+import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { Button, Form, Input, message } from 'antd';
 import { useAdmin } from '../../contexts/useAdmin';
-import Raxios from '../../utils/axiosHelper';
+import { BASE_URL } from '../../utils/axiosHelper';
+import { Button, Form, Input, message } from 'antd';
 
 const Login = ({ setIsLoggedIn }: { setIsLoggedIn: (value: boolean) => void }) => {
     const [loading, setLoading] = useState(false);
@@ -13,15 +14,17 @@ const Login = ({ setIsLoggedIn }: { setIsLoggedIn: (value: boolean) => void }) =
         setLoading(true);
         const { phoneNumber, password } = values;
         try {
-            const response = await Raxios.post('/actions/admin_auth', {
+            const response = await axios.post(`${BASE_URL}/actions/admin_auth`, {
                 phoneNumber, password, action: 'login'
             });
-            const { access_token, refresh_token, user } = response.data;
+            console.log("🚀 ~ onFinish ~ response:", response)
+            const { access_token, refresh_token, user } = response.data.output_details;
+
             localStorage.setItem('access_token', access_token);
             localStorage.setItem('refresh_token', refresh_token);
             setAdmin(user);
             setIsLoggedIn(true);
-            navigate('/admin/dashboard');
+            navigate('/');
             localStorage.setItem('isLoggedIn', 'true');
         } catch (error) {
             console.error('Login failed', error);

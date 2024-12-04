@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import Scan from "./pages/scan";
-import Login from "./pages/login"; // Import Login component
+import Login from "./pages/login";
 import { ConfigProvider, theme } from "antd";
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
+import SignUp from "./pages/signup";
 
 const App = () => {
   const version = "0.0.1";
@@ -29,8 +30,9 @@ const App = () => {
         <Routes>
           {isLoggedIn ? (
             <>
+              <Route path="/signup" element={<SignUp />} />
               <Route path="/scan" element={<Scan />} />
-              <Route path="/" element={<Navigate to="/scan" />} />
+              <Route path="/" element={<div />} />
             </>
           ) : (
             <Route path="*" element={<Login setIsLoggedIn={setIsLoggedIn} />} />
